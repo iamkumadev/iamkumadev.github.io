@@ -65,6 +65,35 @@
   }, { threshold: 0.2 });
   document.querySelectorAll('.sk-cat').forEach(cat => skillObs.observe(cat));
 
+  /* ── PROJECT IMAGE CAROUSELS ──────────────────────── */
+  document.querySelectorAll('[data-carousel]').forEach(car => {
+    const slides = [...car.querySelectorAll('.p-car-slide')];
+    const thumbs = [...car.querySelectorAll('.p-car-thumb')];
+    const prevBtn = car.querySelector('.p-car-btn.prev');
+    const nextBtn = car.querySelector('.p-car-btn.next');
+    let index = 0;
+
+    const render = () => {
+      slides.forEach((s, i) => s.classList.toggle('active', i === index));
+      thumbs.forEach((t, i) => t.classList.toggle('active', i === index));
+    };
+
+    const go = (dir) => {
+      index = (index + dir + slides.length) % slides.length;
+      render();
+    };
+
+    prevBtn && prevBtn.addEventListener('click', (e) => { e.preventDefault(); go(-1); });
+    nextBtn && nextBtn.addEventListener('click', (e) => { e.preventDefault(); go(1); });
+    thumbs.forEach((t, i) => t.addEventListener('click', (e) => {
+      e.preventDefault();
+      index = i;
+      render();
+    }));
+
+    render();
+  });
+
   /* ── FOOTER YEAR ──────────────────────────────────── */
   document.getElementById('ft-yr').textContent =
     '© ' + new Date().getFullYear() + ' James Kuma';
